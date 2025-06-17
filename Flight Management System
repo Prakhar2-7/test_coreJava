@@ -1,0 +1,74 @@
+public class FlightManager {
+    public static void main(String[] args) {
+        Flight[] flights = new Flight[2];
+        flights[0] = new DomesticFlight("D101", "Delhi", "Mumbai", 5000);
+        flights[1] = new InternationalFlight("I201", "Delhi", "New York", 20000, 3000);
+
+        for (Flight flight : flights) {
+            System.out.println("----- Flight Details -----");
+            flight.displayDetails();
+            System.out.println();
+        }
+    }
+}
+abstract class Flight {
+    String flightNumber, origin, destination;
+    double baseFare;
+
+    public Flight(String flightNumber, String origin, String destination, double baseFare) {
+        this.flightNumber = flightNumber;
+        this.origin = origin;
+        this.destination = destination;
+        this.baseFare = baseFare;
+    }
+
+    abstract double calculateFare();
+
+    public void displayDetails() {
+        System.out.println("Flight Number: " + flightNumber);
+        System.out.println("Origin: " + origin);
+        System.out.println("Destination: " + destination);
+        System.out.println("Base Fare: " + baseFare);
+    }
+}
+
+class DomesticFlight extends Flight {
+    final double domesticTax = 0.10;
+
+    public DomesticFlight(String flightNumber, String origin, String destination, double baseFare) {
+        super(flightNumber, origin, destination, baseFare);
+    }
+
+    @Override
+    double calculateFare() {
+        return baseFare + (baseFare * domesticTax);
+    }
+
+    @Override
+    public void displayDetails() {
+        super.displayDetails();
+        System.out.println("Total Fare (Domestic): " + calculateFare());
+    }
+}
+
+class InternationalFlight extends Flight {
+    final double internationalTax = 0.20;
+    double immigrationFee;
+
+    public InternationalFlight(String flightNumber, String origin, String destination, double baseFare, double immigrationFee) {
+        super(flightNumber, origin, destination, baseFare);
+        this.immigrationFee = immigrationFee;
+    }
+
+    @Override
+    double calculateFare() {
+        return baseFare + (baseFare * internationalTax) + immigrationFee;
+    }
+
+    @Override
+    public void displayDetails() {
+        super.displayDetails();
+        System.out.println("Immigration Fee: " + immigrationFee);
+        System.out.println("Total Fare (International): " + calculateFare());
+    }
+}
